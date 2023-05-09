@@ -13,12 +13,15 @@ namespace ProductCatalogMVC.Domain.Model
         public int Id { get; set; }
         public string Name { get; set; }
         public int ItemId { get; set; }
-        //public int Quantity { get; set; }
+        public int Quantity { get; set; }
         public decimal NetPurchasePrice { get; set; }
+        public decimal NetRetailPrice { get; set; }
+        public decimal NetWholesalePrice { get; set; }
+        public decimal NetSpecialPrice { get; set; }
+        public decimal VatRate { get; set; }
         public int ShipingTime { get; set; }
         public virtual Item Item { get; set; }
-        public Price Price { get; set; }
-        public Quantity Quantity { get; set; }
+      
 
     }
 }

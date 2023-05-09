@@ -17,14 +17,15 @@ namespace ProductCatalogMVC.Domain.Model
         public int Id { get; set; }
         public string Name { get; set; }
         public string ShortDescription { get; set; }
+        public string Symbol { get; set; }
         public string EanCode { get; set; }
-        public string ImageFileName { get; set; }
+        public string ImageFolderName { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public ICollection<ItemCategory> ItemCategory { get; set; }
-        public virtual ICollection<Price> Prices { get; set; }
+       
         public virtual ICollection<Warehouse> Warehouses { get; set; }
-        public virtual ICollection<Quantity> Quantities { get; set; }
+       
 
 
 

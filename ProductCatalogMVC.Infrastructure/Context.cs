@@ -15,8 +15,6 @@ namespace ProductCatalogMVC.Infrastructure
         public DbSet<Category> Categories { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<ItemCategory> ItemCategory { get; set; }
-        public DbSet<Price> Prices { get; set; }
-        public DbSet<Quantity> Quantities { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
 
         public Context(DbContextOptions options) : base(options)
@@ -25,13 +23,7 @@ namespace ProductCatalogMVC.Infrastructure
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            builder.Entity<Warehouse>()
-                .HasOne(a => a.Price).WithOne(b => b.Warehouse)
-                .HasForeignKey<Price>(e => e.WarehouseRef);
-            builder.Entity<Warehouse>()
-                .HasOne(a => a.Quantity).WithOne(b => b.Warehouse)
-                .HasForeignKey<Quantity>(e => e.WarehouseRef);
+         
             builder.Entity<ItemCategory>()
                 .HasKey(ic=> new {ic.ItemId,ic.CategoryId});
             builder.Entity<ItemCategory>()
