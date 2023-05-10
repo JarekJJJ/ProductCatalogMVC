@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ProductCatalogMVC.Domain.Interface;
 using ProductCatalogMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ProductCatalogMVC.Infrastructure.Repositories
 {
-    public class ItemRepository
+    public class ItemRepository :IItemRepository
     {
         private readonly Context _context;
         public ItemRepository(Context context)

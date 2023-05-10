@@ -1,4 +1,5 @@
-﻿using ProductCatalogMVC.Domain.Model;
+﻿using ProductCatalogMVC.Domain.Interface;
+using ProductCatalogMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ProductCatalogMVC.Infrastructure.Repositories
 {
-    public class WarehouseRepository
+    public class WarehouseRepository :IWarehouseRepository
     {
         private Context _context;
         public WarehouseRepository(Context context)
@@ -25,7 +26,7 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
             var warehouseDetail = _context.Warehouses.Where(w => w.ItemId == itemId);
             return warehouseDetail;
         }
-        public void DeleteWarehause(int itemId)
+        public void DeleteItemInWarehause(int itemId)
         {
           var warehouse = _context.Warehouses.Where(w => w.ItemId == itemId);
             if(warehouse !=null)
@@ -33,7 +34,6 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
                 _context.Warehouses.RemoveRange(warehouse);
                 _context.SaveChanges();
             }
-        }
-            
+        }           
     }
 }

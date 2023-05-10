@@ -13,8 +13,6 @@ namespace ProductCatalogMVC.Domain.Model
         public int CategoryHomeId { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
-        public ICollection<ItemCategory> ItemCategory { get; set; }
-
-        
+        public ICollection<ItemCategory> ItemCategory { get; set; }        
     }
 }
