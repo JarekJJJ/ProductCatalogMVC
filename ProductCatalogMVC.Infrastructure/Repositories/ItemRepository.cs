@@ -65,6 +65,11 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
         public int UpdateItem(Item item)
         {
             var _item = _context.Items.FirstOrDefault(i => i.Id == item.Id);
+            if (_item != null)
+            {
+                _item = item;
+                _context.SaveChanges();
+            }
             return _item.Id;
         }
     }

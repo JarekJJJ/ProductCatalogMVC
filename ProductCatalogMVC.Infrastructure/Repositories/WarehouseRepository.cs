@@ -43,6 +43,7 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
             if (entity != null)
             {
                 entity = warehouse;
+                _context.SaveChanges();
             }
             else
             {
