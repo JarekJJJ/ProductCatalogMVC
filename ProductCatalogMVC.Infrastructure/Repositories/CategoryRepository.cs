@@ -23,5 +23,33 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
             _context.SaveChanges();
             return category.Id;
         }
+
+        public void DeleteCategory(int id)
+        {
+           var category = _context.Categories.Find(id);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+                _context.SaveChanges();
+               
+            }
+        }
+
+        public IQueryable<Category> GetAllCategory()
+        {
+            var category = _context.Categories;
+            return category;
+        }
+
+        public int UpdateCategory(Category category)
+        {
+           var entity = _context.Categories.Find(category.Id);
+            if (entity != null)
+            {
+                entity = category;
+                _context.SaveChanges();
+            }
+            return category.Id;
+        }
     }
 }

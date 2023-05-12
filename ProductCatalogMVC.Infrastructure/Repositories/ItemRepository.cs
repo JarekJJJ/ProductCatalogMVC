@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace ProductCatalogMVC.Infrastructure.Repositories
 {
-    public class ItemRepository :IItemRepository
+    public class ItemRepository : IItemRepository
     {
         private readonly Context _context;
         public ItemRepository(Context context)
         {
             _context = context;
         }
-        public void PermamentDeleteItem(int itemId)
+        public void DeleteItem(int itemId)
         {
             var item = _context.Items.Find(itemId);
             if (item != null)
@@ -43,7 +43,7 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
         }
         public Item GetItemBySymbol(string symbol)
         {
-            var item = _context.Items.FirstOrDefault(x => x.Symbol==symbol);
+            var item = _context.Items.FirstOrDefault(x => x.Symbol == symbol);
             return item;
         }
 
@@ -53,6 +53,19 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
                 .ThenInclude(ic => ic.Category)
                 .Where(i => i.ItemCategory.Any(ic => ic.CategoryId == categoryId));
             return items;
+        }
+
+        public IQueryable<Item> GetAllItems()
+        {
+            var items = _context.Items;
+
+            return items;
+        }
+
+        public int UpdateItem(Item item)
+        {
+            var _item = _context.Items.FirstOrDefault(i => i.Id == item.Id);
+            return _item.Id;
         }
     }
 }

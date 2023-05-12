@@ -10,5 +10,9 @@ namespace ProductCatalogMVC.Domain.Interface
     public interface ICategoryRepository
     {
         int AddCategory(Category category);
+        IQueryable<Category> GetAllCategory();
+        int UpdateCategory(Category category);
+        void DeleteCategory(int categoryId);
+
     }
 }

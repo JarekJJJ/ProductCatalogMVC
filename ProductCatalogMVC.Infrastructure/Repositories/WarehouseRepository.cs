@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace ProductCatalogMVC.Infrastructure.Repositories
 {
-    public class WarehouseRepository :IWarehouseRepository
+    public class WarehouseRepository : IWarehouseRepository
     {
         private Context _context;
         public WarehouseRepository(Context context)
         {
             _context = context;
         }
-        public int AddNewDelivery (Warehouse warehouse)
+        public int AddNewDelivery(Warehouse warehouse)
         {
             _context.Add(warehouse);
             _context.SaveChanges();
@@ -26,14 +26,30 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
             var warehouseDetail = _context.Warehouses.Where(w => w.ItemId == itemId);
             return warehouseDetail;
         }
-        public void DeleteItemInWarehause(int itemId)
+        public void DeleteItemInWarehouse(int itemId)
         {
-          var warehouse = _context.Warehouses.Where(w => w.ItemId == itemId);
-            if(warehouse !=null)
+            var warehouse = _context.Warehouses.Where(w => w.ItemId == itemId);
+            if (warehouse != null)
             {
                 _context.Warehouses.RemoveRange(warehouse);
                 _context.SaveChanges();
             }
-        }           
+        }
+
+        public int UpdateItemInWarehouse(int itemId, Warehouse warehouse)
+        {
+            var entity = _context.Warehouses
+                .SingleOrDefault(w => w.ItemId == itemId && w.Id == warehouse.Id);
+            if (entity != null)
+            {
+                entity = warehouse;
+            }
+            else
+            {
+                return 0;
+            }
+            return entity.Id;
+
+        }
     }
 }

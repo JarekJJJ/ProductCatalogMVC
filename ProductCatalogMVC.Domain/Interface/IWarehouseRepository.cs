@@ -9,8 +9,9 @@ namespace ProductCatalogMVC.Domain.Interface
 {
     public interface IWarehouseRepository
     {
-        public int AddNewDelivery(Warehouse warehouse);
+        int AddNewDelivery(Warehouse warehouse);
         IQueryable<Warehouse> GetItemWarehouseDetail(int itemId);
-        void DeleteItemInWarehause(int itemId);
+        void DeleteItemInWarehouse(int itemId);
+        int UpdateItemInWarehouse (int itemId, Warehouse warehouse);
     }
 }
