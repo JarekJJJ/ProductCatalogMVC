@@ -3,6 +3,7 @@ using ProductCatalogMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,20 +28,37 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
                 .FirstOrDefault(w => w.ItemId == itemId && w.WarehouseId == warehouseId);
             return warehouseItemDetail;
         }
-        public void DeleteItemInWarehouse(int id)
+        public IQueryable<WarehouseItem> GetItemfromAllWarehouses(int itemId)
         {
-            var entity = _context.WarehouseItems.FirstOrDefault(w => w.Id == id);
+            var entity = _context.WarehouseItems.Where(w => w.ItemId == itemId);
+            return entity;
+        }
+        public IQueryable<WarehouseItem> GetAllItems()
+        {
+            var entity = _context.WarehouseItems;
+            return entity;
+        }
+        public void DeleteItemInWarehouse(WarehouseItem warehouseItem)
+        {
+            var entity = _context.WarehouseItems.Where(w => w.ItemId == warehouseItem.ItemId)
+                .FirstOrDefault(w => w.WarehouseId == warehouseItem.WarehouseId);
             if (entity != null)
             {
                 _context.WarehouseItems.Remove(entity);
                 _context.SaveChanges();
             }
         }
+        public void DeleteItemInAllWarehouses(int itemId)
+        {
+            var entity = _context.WarehouseItems.Where(w => w.ItemId == itemId);
+            _context.WarehouseItems.RemoveRange(entity);
+            _context.SaveChanges();
+        }
 
         public int UpdateItemInWarehouse(WarehouseItem warehouseItem)
         {
             var entity = _context.WarehouseItems
-                .SingleOrDefault(w => w.ItemId == warehouseItem.ItemId && w.WarehouseId==warehouseItem.WarehouseId);
+                .FirstOrDefault(w => w.ItemId == warehouseItem.ItemId && w.WarehouseId == warehouseItem.WarehouseId);
             if (entity != null)
             {
                 entity = warehouseItem;

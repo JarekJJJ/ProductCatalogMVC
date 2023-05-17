@@ -10,10 +10,11 @@ namespace ProductCatalogMVC.Domain.Interface
     public interface IWarehouseItemRepository
     {
         int AddNewDelivery(WarehouseItem warehouseItem);
-        WarehouseItem GetItem(int itemId);
+        WarehouseItem GetItem(int itemId, int warehouseId);
         IQueryable<WarehouseItem> GetItemfromAllWarehouses(int itemId);
         IQueryable<WarehouseItem> GetAllItems();
-        void DeleteItem(int id);
+        void DeleteItemInWarehouse(WarehouseItem warehouseItem);
+        void DeleteItemInAllWarehouses(int itemId);
         int UpdateItemInWarehouse (WarehouseItem warehouseItem);
     }
 }
