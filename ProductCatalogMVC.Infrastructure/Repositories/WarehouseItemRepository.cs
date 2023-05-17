@@ -21,9 +21,10 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
             _context.SaveChanges();
             return warehouseItems.Id;
         }
-        public WarehouseItem GetItem(int id)
+        public WarehouseItem GetItem(int itemId, int warehouseId)
         {
-            var warehouseItemDetail = _context.WarehouseItems.FirstOrDefault(w => w.Id == id);
+            var warehouseItemDetail = _context.WarehouseItems
+                .FirstOrDefault(w => w.ItemId == itemId && w.WarehouseId == warehouseId);
             return warehouseItemDetail;
         }
         public void DeleteItemInWarehouse(int id)
@@ -36,13 +37,13 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
             }
         }
 
-        public int UpdateItemInWarehouse(int itemId, Warehouse warehouse)
+        public int UpdateItemInWarehouse(WarehouseItem warehouseItem)
         {
-            var entity = _context.Warehouses
-                .SingleOrDefault(w => w.ItemId == itemId && w.Id == warehouse.Id);
+            var entity = _context.WarehouseItems
+                .SingleOrDefault(w => w.ItemId == warehouseItem.ItemId && w.WarehouseId==warehouseItem.WarehouseId);
             if (entity != null)
             {
-                entity = warehouse;
+                entity = warehouseItem;
                 _context.SaveChanges();
             }
             else

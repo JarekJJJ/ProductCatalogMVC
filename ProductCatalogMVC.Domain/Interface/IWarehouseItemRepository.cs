@@ -12,8 +12,8 @@ namespace ProductCatalogMVC.Domain.Interface
         int AddNewDelivery(WarehouseItem warehouseItem);
         WarehouseItem GetItem(int itemId);
         IQueryable<WarehouseItem> GetItemfromAllWarehouses(int itemId);
-        IQueryable<WarehouseItem> GetAll();
+        IQueryable<WarehouseItem> GetAllItems();
         void DeleteItem(int id);
-        int UpdateItemInWarehouse (int id, WarehouseItem warehouseItem);
+        int UpdateItemInWarehouse (WarehouseItem warehouseItem);
     }
 }
