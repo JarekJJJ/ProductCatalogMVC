@@ -8,30 +8,30 @@ using System.Threading.Tasks;
 
 namespace ProductCatalogMVC.Infrastructure.Repositories
 {
-    public class WarehouseRepository : IWarehouseRepository
+    public class WarehouseItemRepository : IWarehouseItemRepository
     {
         private Context _context;
-        public WarehouseRepository(Context context)
+        public WarehouseItemRepository(Context context)
         {
             _context = context;
         }
-        public int AddNewDelivery(Warehouse warehouse)
+        public int AddNewDelivery(WarehouseItem warehouseItems)
         {
-            _context.Add(warehouse);
+            _context.Add(warehouseItems);
             _context.SaveChanges();
-            return warehouse.Id;
+            return warehouseItems.Id;
         }
-        public IQueryable<Warehouse> GetItemWarehouseDetail(int itemId)
+        public WarehouseItem GetItem(int id)
         {
-            var warehouseDetail = _context.Warehouses.Where(w => w.ItemId == itemId);
-            return warehouseDetail;
+            var warehouseItemDetail = _context.WarehouseItems.FirstOrDefault(w => w.Id == id);
+            return warehouseItemDetail;
         }
-        public void DeleteItemInWarehouse(int itemId)
+        public void DeleteItemInWarehouse(int id)
         {
-            var warehouse = _context.Warehouses.Where(w => w.ItemId == itemId);
-            if (warehouse != null)
+            var entity = _context.WarehouseItems.FirstOrDefault(w => w.Id == id);
+            if (entity != null)
             {
-                _context.Warehouses.RemoveRange(warehouse);
+                _context.WarehouseItems.Remove(entity);
                 _context.SaveChanges();
             }
         }

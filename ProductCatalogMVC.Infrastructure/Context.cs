@@ -16,6 +16,7 @@ namespace ProductCatalogMVC.Infrastructure
         public DbSet<Item> Items { get; set; }
         public DbSet<ItemCategory> ItemCategory { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
+        public DbSet<WarehouseItem> WarehouseItems { get; set; }
 
         public Context(DbContextOptions options) : base(options)
         {

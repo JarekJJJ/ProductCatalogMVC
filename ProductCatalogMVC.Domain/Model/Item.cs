@@ -23,6 +23,6 @@ namespace ProductCatalogMVC.Domain.Model
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
         public ICollection<ItemCategory> ItemCategory { get; set; }
-        public virtual ICollection<Warehouse> Warehouses { get; set; }
+        public virtual ICollection<WarehouseItem> WarehouseItems { get; set; }
     }
 }
