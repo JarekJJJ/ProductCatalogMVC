@@ -15,5 +15,6 @@ namespace ProductCatalogMVC.Domain.Model
         public bool IsActive { get; set; }
 
         public virtual ICollection<WarehouseItem> WarehouseItems { get; set; }
+       
     }
 }
