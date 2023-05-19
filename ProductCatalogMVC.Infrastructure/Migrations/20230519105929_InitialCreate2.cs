@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ProductCatalogMVC.Infrastructure.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitialCreate2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -81,6 +81,22 @@ namespace ProductCatalogMVC.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Warehouses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShipingTime = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Warehouses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -214,28 +230,33 @@ namespace ProductCatalogMVC.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Warehouses",
+                name: "WarehouseItems",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ItemId = table.Column<int>(type: "int", nullable: false),
+                    WarehouseId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     NetPurchasePrice = table.Column<float>(type: "real", nullable: false),
                     NetRetailPrice = table.Column<float>(type: "real", nullable: false),
                     NetWholesalePrice = table.Column<float>(type: "real", nullable: false),
                     NetSpecialPrice = table.Column<float>(type: "real", nullable: false),
-                    VatRate = table.Column<float>(type: "real", nullable: false),
-                    ShipingTime = table.Column<int>(type: "int", nullable: false)
+                    VatRate = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Warehouses", x => x.Id);
+                    table.PrimaryKey("PK_WarehouseItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Warehouses_Items_ItemId",
+                        name: "FK_WarehouseItems_Items_ItemId",
                         column: x => x.ItemId,
                         principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_WarehouseItems_Warehouses_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "Warehouses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -285,9 +306,14 @@ namespace ProductCatalogMVC.Infrastructure.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Warehouses_ItemId",
-                table: "Warehouses",
+                name: "IX_WarehouseItems_ItemId",
+                table: "WarehouseItems",
                 column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_WarehouseItems_WarehouseId",
+                table: "WarehouseItems",
+                column: "WarehouseId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -311,7 +337,7 @@ namespace ProductCatalogMVC.Infrastructure.Migrations
                 name: "ItemCategory");
 
             migrationBuilder.DropTable(
-                name: "Warehouses");
+                name: "WarehouseItems");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -324,6 +350,9 @@ namespace ProductCatalogMVC.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Items");
+
+            migrationBuilder.DropTable(
+                name: "Warehouses");
         }
     }
 }

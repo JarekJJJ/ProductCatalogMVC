@@ -12,8 +12,8 @@ using ProductCatalogMVC.Infrastructure;
 namespace ProductCatalogMVC.Infrastructure.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230510204733_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230519105929_InitialCreate2")]
+    partial class InitialCreate2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -314,12 +314,35 @@ namespace ProductCatalogMVC.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ShipingTime")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Warehouses");
+                });
+
+            modelBuilder.Entity("ProductCatalogMVC.Domain.Model.WarehouseItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
 
                     b.Property<float>("NetPurchasePrice")
                         .HasColumnType("real");
@@ -336,17 +359,19 @@ namespace ProductCatalogMVC.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShipingTime")
-                        .HasColumnType("int");
-
                     b.Property<float>("VatRate")
                         .HasColumnType("real");
+
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("Warehouses");
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("WarehouseItems");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -419,15 +444,23 @@ namespace ProductCatalogMVC.Infrastructure.Migrations
                     b.Navigation("Item");
                 });
 
-            modelBuilder.Entity("ProductCatalogMVC.Domain.Model.Warehouse", b =>
+            modelBuilder.Entity("ProductCatalogMVC.Domain.Model.WarehouseItem", b =>
                 {
                     b.HasOne("ProductCatalogMVC.Domain.Model.Item", "Item")
-                        .WithMany("Warehouses")
+                        .WithMany("WarehouseItems")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ProductCatalogMVC.Domain.Model.Warehouse", "Warehouse")
+                        .WithMany("WarehouseItems")
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Item");
+
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("ProductCatalogMVC.Domain.Model.Category", b =>
@@ -439,7 +472,12 @@ namespace ProductCatalogMVC.Infrastructure.Migrations
                 {
                     b.Navigation("ItemCategory");
 
-                    b.Navigation("Warehouses");
+                    b.Navigation("WarehouseItems");
+                });
+
+            modelBuilder.Entity("ProductCatalogMVC.Domain.Model.Warehouse", b =>
+                {
+                    b.Navigation("WarehouseItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -20,4 +20,8 @@
     <ProjectReference Include="..\ProductCatalogMVC.Domain\ProductCatalogMVC.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

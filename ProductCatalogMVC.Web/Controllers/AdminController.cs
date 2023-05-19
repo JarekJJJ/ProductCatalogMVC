@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProductCatalogMVC.Application.Services;
 
 namespace ProductCatalogMVC.Web.Controllers
 {
@@ -16,6 +17,13 @@ namespace ProductCatalogMVC.Web.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult AddItem(ItemModel model) 
+        { 
+            var id = ItemService.AddItem(model);
+            return View();
+        }
+
        
        
     }
