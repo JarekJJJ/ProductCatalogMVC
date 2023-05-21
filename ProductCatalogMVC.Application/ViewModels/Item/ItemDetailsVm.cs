@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProductCatalogMVC.Application.ViewModels.Item
 {
-    internal class ItemDetailsVm
+    public class ItemDetailsVm
     {
     }
 }

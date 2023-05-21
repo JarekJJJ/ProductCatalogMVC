@@ -36,6 +36,14 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
         {
             return _context.Warehouses;
         }
+
+        public Warehouse GetWarehouseById(int id)
+        {
+            var entity = _context.Warehouses.FirstOrDefault(w => w.Id == id);
+           
+                return entity;           
+        }
+
         public int UpdateWarehouse(Warehouse warehouse)
         {
             var entity = _context.Warehouses.FirstOrDefault(w => w.Id == warehouse.Id);
@@ -44,7 +52,12 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
                 entity = warehouse;
                 return entity.Id;
             }
-            return 0;
+            else
+            {
+                return 0;
+            }
+            
         }
+
     }
 }

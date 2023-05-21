@@ -13,6 +13,7 @@ namespace ProductCatalogMVC.Domain.Interface
         IQueryable<Warehouse> GetAll();
         int UpdateWarehouse(Warehouse warehouse);
         int DeleteWarehouse(int warehouseId);
+        Warehouse GetWarehouseById(int id);
 
     }
 }
