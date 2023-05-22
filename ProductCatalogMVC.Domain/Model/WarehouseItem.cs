@@ -17,7 +17,8 @@ namespace ProductCatalogMVC.Domain.Model
         public float NetRetailPrice { get; set; }
         public float NetWholesalePrice { get; set; }
         public float NetSpecialPrice { get; set; }
-        public float VatRate { get; set; }      
+        public float VatRate { get; set; }  
+        public bool IsActive { get; set; }
         public virtual Item Item { get; set; }
         public virtual Warehouse Warehouse { get; set; }
     }

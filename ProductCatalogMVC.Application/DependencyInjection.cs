@@ -15,6 +15,7 @@ namespace ProductCatalogMVC.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddTransient<IItemService, ItemService>();
+            services.AddTransient<IAdminService,AdminService>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             return services;
         }

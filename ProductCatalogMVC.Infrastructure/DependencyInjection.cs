@@ -18,6 +18,7 @@ namespace ProductCatalogMVC.Infrastructure
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IWarehouseItemRepository, WarehouseItemRepository>();
             services.AddTransient<IWarehouseRepository, WarehouseRepository>();
+            services.AddTransient<ISupplierCategoryRepository, SupplierCategoryRepository>();
             return services;
         }
     }

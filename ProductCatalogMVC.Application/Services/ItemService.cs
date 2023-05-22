@@ -25,10 +25,7 @@ namespace ProductCatalogMVC.Application.Services
             _mapper = mapper;
         }
 
-        public int AddItem(NewItemVm item)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         //public ListItemForListVm GetAllItemsForList() //
         //{

@@ -1,4 +1,5 @@
 ﻿using ProductCatalogMVC.Application.ViewModels.Item;
+using ProductCatalogMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace ProductCatalogMVC.Application.Interfaces
 {
-    public interface IItemService
+    public interface IAdminService
     {
-        ListItemForListVm GetAllItemsForList();
-       // int AddItem(NewItemVm item);
-        ItemDetailsVm GetItemsDetails(int itemId);
+        int AddWarehouse(NewWarehouseVm warehouse);
     }
 }

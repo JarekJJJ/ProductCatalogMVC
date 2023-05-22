@@ -13,6 +13,7 @@ namespace ProductCatalogMVC.Infrastructure
     public class Context : IdentityDbContext
     {
         public DbSet<Category> Categories { get; set; }
+        public DbSet<SupplierCategory> supplierCategories { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<ItemCategory> ItemCategory { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
