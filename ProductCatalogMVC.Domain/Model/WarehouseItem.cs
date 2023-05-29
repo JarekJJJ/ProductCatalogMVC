@@ -11,6 +11,7 @@ namespace ProductCatalogMVC.Domain.Model
     {
         public int Id { get; set; }
         public int ItemId { get; set; }
+        public int SuppCategoryId { get; set; }
         public int WarehouseId { get; set; }
         public int Quantity { get; set; }
         public float NetPurchasePrice { get; set; }

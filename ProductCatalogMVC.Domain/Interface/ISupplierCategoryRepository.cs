@@ -9,9 +9,10 @@ namespace ProductCatalogMVC.Domain.Interface
 {
     public interface ISupplierCategoryRepository
     {
-        int AddCategory(SupplierCategory supplierCategory);
+        void AddSuppCategory(SupplierCategory supplierCategory);
         IQueryable<SupplierCategory> GetAllCategory();
         int UpdateCategory(SupplierCategory supplierCategory);
         void DeleteCategory(int id);
+        void DeleteAllCategory();
     }
 }

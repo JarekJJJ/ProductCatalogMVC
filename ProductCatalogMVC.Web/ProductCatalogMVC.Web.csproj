@@ -21,4 +21,8 @@
     <ProjectReference Include="..\ProductCatalogMVC.Infrastructure\ProductCatalogMVC.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+
 </Project>

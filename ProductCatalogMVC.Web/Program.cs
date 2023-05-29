@@ -4,6 +4,7 @@ using ProductCatalogMVC.Application;
 using ProductCatalogMVC.Domain.Interface;
 using ProductCatalogMVC.Infrastructure;
 using ProductCatalogMVC.Infrastructure.Repositories;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
 var app = builder.Build();
+
+var cultureInfo = new CultureInfo("pl-PL");
+cultureInfo.NumberFormat.NumberDecimalSeparator = ".";
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -43,6 +48,9 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "Admin",
+    pattern: "{controller=Admin}/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();

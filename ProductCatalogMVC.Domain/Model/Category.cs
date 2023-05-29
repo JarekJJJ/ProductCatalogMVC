@@ -9,7 +9,7 @@ namespace ProductCatalogMVC.Domain.Model
     public class Category
     {
         public int Id { get; set; }
-        public int CategoryId { get; set; }
+        public int CategoryMainId { get; set; }
         public int CategoryHomeId { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }

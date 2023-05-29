@@ -15,19 +15,26 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
         {
             _context = context;
         }
-        public int AddCategory(SupplierCategory supplierCategory)
+        public void AddSuppCategory(SupplierCategory supplierCategory)
         {
             _context.Add(supplierCategory);
             _context.SaveChanges();
-            return supplierCategory.Id;
+          // return supplierCategory.Id;
+        }
+
+        public void DeleteAllCategory()
+        {
+            var toDeletedCat = _context.supplierCategories;
+            _context.supplierCategories.RemoveRange(toDeletedCat);
+            _context.SaveChanges();
         }
 
         public void DeleteCategory(int id)
         {
-            var category = _context.Categories.Find(id);
+            var category = _context.supplierCategories.Find(id);
             if (category != null)
             {
-                _context.Categories.Remove(category);
+                _context.supplierCategories.Remove(category);
                 _context.SaveChanges();
 
             }

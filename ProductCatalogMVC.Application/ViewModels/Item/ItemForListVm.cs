@@ -18,6 +18,7 @@ namespace ProductCatalogMVC.Application.ViewModels.Item
         public string ShortDescription { get; set; } //Pozycje z modelu Item
         public string Symbol { get; set; }//Pozycje z modelu Item
         public string EanCode { get; set; }//Pozycje z modelu Item
+        public string Producent { get; set; } // Item
         public bool IsActive { get; set; } // ---||-----
         public float Price { get; set; }//pozycja z modelu ItemWarehouse
         public int Quantity { get; set; } //pozycja z modelu ItemWarehouse
