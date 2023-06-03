@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /ProductCatalogMVC.Web/appsettings.json
 /ProductCatalogMVC.Web/appsettings.Development.json
+/ProductCatalogMVC.Web/wwwroot/img
