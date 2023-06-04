@@ -1,4 +1,5 @@
 ﻿using ProductCatalogMVC.Application.ViewModels.Admin;
+using ProductCatalogMVC.Application.ViewModels.Category;
 using ProductCatalogMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace ProductCatalogMVC.Application.Interfaces
         //int AddSuppCategory(XmlDocument supplierCategory);
         void LoadXmlCategory(XDocument xmlDocument);
         void LoadItemsXML(XDocument xmlDocument);
-        int AddCatalogCategory(NewCatalogCategoryVm newCatalogCategoryVm);
-        List<Category> GetCatalogCategory();
+        NewCatalogCategoryVm AddCatalogCategory(NewCatalogCategoryVm newCatalogCategoryVm);
+       // List<CatalogCategoryForListVm> GetCatalogCategory();
     }
 }

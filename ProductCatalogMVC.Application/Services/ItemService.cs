@@ -87,7 +87,7 @@ namespace ProductCatalogMVC.Application.Services
                 var category = new CatalogCategoryForListVm()
                 {
                     Id= catCategory.Id,
-                    CategoryMainId = catCategory.CategoryMainId,
+                   // CategoryMainId = catCategory.CategoryMainId,
                     CategoryHomeId = catCategory.CategoryHomeId,
                     Name = catCategory.Name,
                     IsActive = catCategory.IsActive,

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ProductCatalogMVC.Application.Mapping;
+using ProductCatalogMVC.Application.ViewModels.Category;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace ProductCatalogMVC.Application.ViewModels.Admin
     public class NewCatalogCategoryVm : IMapFrom<Domain.Model.Category>
     {
         public int Id { get; set; }
-        public int CategoryMainId { get; set; }
+       // public int CategoryMainId { get; set; }
         public int CategoryHomeId { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
+        public bool IsMainCategory { get; set; }
+        public List<CatalogCategoryForListVm> CatalogCategoryList { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<NewCatalogCategoryVm, Domain.Model.Category>();

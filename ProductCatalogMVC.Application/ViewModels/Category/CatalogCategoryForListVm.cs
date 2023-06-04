@@ -11,7 +11,7 @@ namespace ProductCatalogMVC.Application.ViewModels.Category
     public class CatalogCategoryForListVm : IMapFrom<ProductCatalogMVC.Domain.Model.Category>
     {
         public int Id { get; set; }
-        public int CategoryMainId { get; set; }
+       // public int CategoryMainId { get; set; }
         public int CategoryHomeId { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }

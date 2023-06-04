@@ -4,6 +4,7 @@ using ProductCatalogMVC.Application.Interfaces;
 using ProductCatalogMVC.Domain.Interface;
 using System.Xml.Linq;
 using ProductCatalogMVC.Application.ViewModels.Admin;
+using ProductCatalogMVC.Application.ViewModels.Category;
 //using System.Xml.Serialization;
 
 namespace ProductCatalogMVC.Web.Controllers
@@ -26,15 +27,21 @@ namespace ProductCatalogMVC.Web.Controllers
         [HttpGet]
         public IActionResult AddCatalogCategory()
         {
+            NewCatalogCategoryVm vm = new NewCatalogCategoryVm();
+            var ListCatalogCategory = _adminService.AddCatalogCategory(vm);
+           
+            //NewCatalogCategoryVm vm = new NewCatalogCategoryVm();
+            //vm.CatalogCategoryList.AddRange(ListCatalogCategory);
+           
             
-            return View(new NewCatalogCategoryVm());
+            return View(ListCatalogCategory);
         }
         [HttpPost]
         public IActionResult AddCatalogCategory(NewCatalogCategoryVm model)
         {
             var id = _adminService.AddCatalogCategory(model);
 
-            return View();
+            return RedirectToAction("AddCatalogCategory");
         }
         [HttpGet]
         public IActionResult AddWarehouse()

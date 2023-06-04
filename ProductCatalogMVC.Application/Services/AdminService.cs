@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using ProductCatalogMVC.Application.Interfaces;
 using ProductCatalogMVC.Application.ViewModels.Admin;
+using ProductCatalogMVC.Application.ViewModels.Category;
+using ProductCatalogMVC.Application.ViewModels.Item;
 using ProductCatalogMVC.Domain.Interface;
 using ProductCatalogMVC.Domain.Model;
 using System;
@@ -35,17 +37,60 @@ namespace ProductCatalogMVC.Application.Services
             _categoryRepo= categoryRepository;
             _mapper = mapper;
         }
-        public int AddCatalogCategory (NewCatalogCategoryVm newCatalogCategoryVm)
+        public NewCatalogCategoryVm AddCatalogCategory (NewCatalogCategoryVm newCatalogCategoryVm)
         {
-            var _category = _mapper.Map<Category>(newCatalogCategoryVm);
-            var id = _categoryRepo.AddCategory(_category);
-           return id;
+            //var _listCC = _mapper.Map<Category>(ListOfCategory);
+            var _category = _categoryRepo.GetAllCategory();
+            NewCatalogCategoryVm result = new NewCatalogCategoryVm();
+            result.CatalogCategoryList = new List<CatalogCategoryForListVm>();
+            if(newCatalogCategoryVm.Name!= null)
+            {
+                if(newCatalogCategoryVm.IsMainCategory==true)
+                {
+                    newCatalogCategoryVm.CategoryHomeId = 0;
+                }
+                var _newCategory = _mapper.Map<Category>(newCatalogCategoryVm);
+                _categoryRepo.AddCategory(_newCategory);
+
+            }
+            foreach (var catCategory in _category)
+            {
+                var category = new CatalogCategoryForListVm()
+                {
+                    Id = catCategory.Id,
+                   // CategoryMainId = catCategory.CategoryMainId,
+                    CategoryHomeId = catCategory.CategoryHomeId,
+                    Name = catCategory.Name,
+                    IsActive = catCategory.IsActive,
+                };
+                result.CatalogCategoryList.Add(category);
+            }
+            return result;
+
+
         }
-        public List<Category> GetCatalogCategory()
-        {
-            var ListOfCategory = _categoryRepo.GetAllCategory().ToList();
-            return ListOfCategory;
-        }
+        //public NewCatalogCategoryVm GetCatalogCategory()
+        //{
+
+        //    //var ListOfCategory = _categoryRepo.GetAllCategory().ToList();
+        //    //var _listCC = _mapper.Map<Category>(ListOfCategory);
+        //    var _category = _categoryRepo.GetAllCategory();
+        //    NewCatalogCategoryVm result = new NewCatalogCategoryVm();
+        //    result.CatalogCategoryList = new List<CatalogCategoryForListVm>();
+        //    foreach (var catCategory in _category)
+        //    {
+        //        var category = new CatalogCategoryForListVm()
+        //        {
+        //            Id = catCategory.Id,
+        //            CategoryMainId = catCategory.CategoryMainId,
+        //            CategoryHomeId = catCategory.CategoryHomeId,
+        //            Name = catCategory.Name,
+        //            IsActive = catCategory.IsActive,
+        //        };
+        //        result.CatalogCategoryList.Add(category);
+        //    }
+        //    return result;
+        //}
         public int AddWarehouse(NewWarehouseVm warehouse)
         {
             var ware = _mapper.Map<Warehouse>(warehouse);
