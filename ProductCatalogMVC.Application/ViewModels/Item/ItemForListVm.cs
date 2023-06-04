@@ -24,14 +24,15 @@ namespace ProductCatalogMVC.Application.ViewModels.Item
         public int Quantity { get; set; } //pozycja z modelu ItemWarehouse
         public int ShipingTime { get; set; } // Pozycja z modelu Warehouse
         public bool IsActiveWar { get; set; } // -----||------
+        public string ImgMainPath { get; set; }
 
-        public void Mapping(Profile profile)
-        {
-            profile.CreateMap<ProductCatalogMVC.Domain.Model.Item, ItemForListVm>();
-            profile.CreateMap<ProductCatalogMVC.Domain.Model.WarehouseItem, ItemForListVm>()
-                .ForMember(d => d.Price, opt => opt.MapFrom(s => s.NetRetailPrice));
-            profile.CreateMap<ProductCatalogMVC.Domain.Model.Warehouse, ItemForListVm>()
-                .ForMember(d => d.IsActiveWar, opt => opt.MapFrom(s => s.IsActive));
-        }
+        //public void Mapping(Profile profile)
+        //{
+        //    profile.CreateMap<ProductCatalogMVC.Domain.Model.Item, ItemForListVm>();
+        //    profile.CreateMap<ProductCatalogMVC.Domain.Model.WarehouseItem, ItemForListVm>()
+        //        .ForMember(d => d.Price, opt => opt.MapFrom(s => s.NetRetailPrice));
+        //    profile.CreateMap<ProductCatalogMVC.Domain.Model.Warehouse, ItemForListVm>()
+        //        .ForMember(d => d.IsActiveWar, opt => opt.MapFrom(s => s.IsActive));
+        //}
     }
 }

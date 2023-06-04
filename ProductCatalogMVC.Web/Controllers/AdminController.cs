@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductCatalogMVC.Application.Services;
-using ProductCatalogMVC.Application.ViewModels.Item;
 using ProductCatalogMVC.Application.Interfaces;
 using ProductCatalogMVC.Domain.Interface;
 using System.Xml.Linq;
+using ProductCatalogMVC.Application.ViewModels.Admin;
 //using System.Xml.Serialization;
 
 namespace ProductCatalogMVC.Web.Controllers
@@ -20,6 +20,19 @@ namespace ProductCatalogMVC.Web.Controllers
             //import kategorii
             //import produktów
             //dodawanie produktu
+
+            return View();
+        }
+        [HttpGet]
+        public IActionResult AddCatalogCategory()
+        {
+            
+            return View(new NewCatalogCategoryVm());
+        }
+        [HttpPost]
+        public IActionResult AddCatalogCategory(NewCatalogCategoryVm model)
+        {
+            var id = _adminService.AddCatalogCategory(model);
 
             return View();
         }

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using ProductCatalogMVC.Application.Interfaces;
-using ProductCatalogMVC.Application.ViewModels.Category;
-using ProductCatalogMVC.Application.ViewModels.Item;
+using ProductCatalogMVC.Application.ViewModels.Admin;
 using ProductCatalogMVC.Domain.Interface;
 using ProductCatalogMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace ProductCatalogMVC.Application.Services
+//zrobić - wysyłanie nazwy zdjęcia w folderze w widoku listofItemVm
 {
     public class AdminService : IAdminService
     {
@@ -22,6 +23,8 @@ namespace ProductCatalogMVC.Application.Services
         private readonly ISupplierCategoryRepository _supplierCategoryRepo;
         private readonly ICategoryRepository _categoryRepo;
         private readonly IMapper _mapper;
+        CultureInfo cultureInfo = new CultureInfo("pl-PL");
+        
         public AdminService(IItemRepository itemRepo, IWarehouseItemRepository wItemRepo,
             IWarehouseRepository warehouseRepo,ISupplierCategoryRepository supplierCategoryRepo, ICategoryRepository categoryRepository ,IMapper mapper)
         {
@@ -32,23 +35,17 @@ namespace ProductCatalogMVC.Application.Services
             _categoryRepo= categoryRepository;
             _mapper = mapper;
         }
-
-        
-
-        //public ListItemForListVm GetAllItemsForList() //
-        //{
-        //    var _items = _itemRepo.GetAllItems()
-        //        .ProjectTo<ItemForListVm>(_mapper.ConfigurationProvider);
-        //        //.Where(a => a.IsActive == true && a.IsActiveWar == true && a.Quantity > 0);
-        //    var itemList = new ListItemForListVm()
-        //    {
-        //        Items = _items.ToList(),
-        //        Count = _items.Count()
-        //    };
-
-        //    return itemList;
-
-        //}
+        public int AddCatalogCategory (NewCatalogCategoryVm newCatalogCategoryVm)
+        {
+            var _category = _mapper.Map<Category>(newCatalogCategoryVm);
+            var id = _categoryRepo.AddCategory(_category);
+           return id;
+        }
+        public List<Category> GetCatalogCategory()
+        {
+            var ListOfCategory = _categoryRepo.GetAllCategory().ToList();
+            return ListOfCategory;
+        }
         public int AddWarehouse(NewWarehouseVm warehouse)
         {
             var ware = _mapper.Map<Warehouse>(warehouse);
@@ -74,7 +71,7 @@ namespace ProductCatalogMVC.Application.Services
                     string fileName = Guid.NewGuid().ToString() + ".jpg";
                     string filePath = System.IO.Path.Combine(newFolderPath, fileName);
                     System.IO.File.WriteAllBytes(filePath, imageData);
-
+                    
                 }
             }
             catch (Exception)
@@ -86,6 +83,10 @@ namespace ProductCatalogMVC.Application.Services
         }
         public void LoadItemsXML(XDocument xmlDocument)
         {
+            CultureInfo cultureInfo = new CultureInfo("pl-PL");
+            cultureInfo.NumberFormat.NumberDecimalSeparator = ",";
+            //cultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+
             foreach (XElement elementXml in xmlDocument.Root.Elements("produkt"))
             {
                 XElement suppCategory = elementXml.Element("grupa_towarowa");
@@ -100,6 +101,8 @@ namespace ProductCatalogMVC.Application.Services
                 if (ProductName != null && XEanCode != null)
                 {
                    NewItemVm itemVm= new NewItemVm();
+                    NewWarehouseItemVm newWarehouseItemVm = new NewWarehouseItemVm();
+                    int warehouseItemId = 0;
                     
                     var validationItem = _itemRepo.GetAllItems().FirstOrDefault(i => i.EanCode == XEanCode.Value);
                     if (validationItem == null) 
@@ -115,8 +118,38 @@ namespace ProductCatalogMVC.Application.Services
                         SaveImageFromLink(ImageLink.Value, itemVm.EanCode);
                         var newItem = _mapper.Map<Item>(itemVm);
                         var id = _itemRepo.AddItem(newItem);
+                       
+                        warehouseItemId = id; //jeżeli produkt nie istnieje pobierane jest Id z nowo utworzonego
+                    }
+                    else
+                    {
+                        warehouseItemId = validationItem.Id; //Jeżeli isnieje pobierane jest z istniejącego
+                    }
+                    var warehouseItem = _wItemRepo.GetItem(itemVm.Id, 1);
+
+                    if (warehouseItem == null)
+                    {
+                        newWarehouseItemVm.SuppCategoryId = int.Parse(suppCategory.Value);
+                        newWarehouseItemVm.ItemId = warehouseItemId;
+                        newWarehouseItemVm.WarehouseId = 1;
+                        newWarehouseItemVm.VatRate = 23;
+                        newWarehouseItemVm.Quantity = int.Parse(ProductQuantity.Value);
+                        newWarehouseItemVm.NetPurchasePrice = float.Parse(PurchasePrice.Value, cultureInfo);
+                        newWarehouseItemVm.IsActive= false;
+                        var _newWarehouseItem = _mapper.Map<WarehouseItem>(newWarehouseItemVm);
+                        var wId = _wItemRepo.AddNewDelivery(_newWarehouseItem);
 
                     }
+                    else
+                    {
+                        //newWarehouseItemVm.Quantity = int.Parse(ProductQuantity.Value);
+                        //newWarehouseItemVm.NetPurchasePrice = float.Parse(PurchasePrice.Value);
+                        //var _newWarehouseItem = _mapper.Map<WarehouseItem>(newWarehouseItemVm);
+                        //var wId = _wItemRepo.UpdateItemInWarehouse(_newWarehouseItem);
+
+                    }
+
+
                    // _itemRepo.AddItem - zrobić mapowanie oraz zapis do warehouseItem
                 }
 
@@ -168,19 +201,7 @@ namespace ProductCatalogMVC.Application.Services
                 }
                 
             }
-            
-            //dorobić zapisywanie w bazie !!!!
-
-            //var incomXml = xmlDocument.Root.Elements("grupy");
-            //
-
-            //foreach (var elementXml in incomXml) 
-            //{
-
-            //    newIncomSuppCategory.CategoryId = int.Parse((elementXml.Element("grupy").Element("id")).ToString());
-            //}
-
-            
+                        
         }
     }
 }
