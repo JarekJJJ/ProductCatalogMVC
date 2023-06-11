@@ -15,6 +15,7 @@ namespace ProductCatalogMVC.Domain.Model
     // wiele produktów
     {
         public int Id { get; set; }
+        public int? CategoryId { get; set; }
         public string Name { get; set; }
         public string ShortDescription { get; set; }
         public string Symbol { get; set; }
@@ -23,7 +24,9 @@ namespace ProductCatalogMVC.Domain.Model
         public string ImageFolderName { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-        public ICollection<ItemCategory> ItemCategory { get; set; }
+
+        //public ICollection<ItemCategory> ItemCategory { get; set; }
+        public virtual Category Category { get; set; }
         public virtual ICollection<WarehouseItem> WarehouseItems { get; set; }
     }
 }

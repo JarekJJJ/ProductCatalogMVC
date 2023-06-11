@@ -9,11 +9,11 @@ namespace ProductCatalogMVC.Domain.Model
     public class SupplierCategory
     {
         public int Id { get; set; }
-        public int CategoryId { get; set; }
-        public int SuppCategoryId { get; set; }
-        public int CategoryHomeId { get; set; }
+        public int CategoryId { get; set; } //CatalogCategory
+        public int SuppCategoryId { get; set; } //SupplierCategory
+        public int CategoryHomeId { get; set; } // Supplier Main Category
         public string Name { get; set; }
-        public int WarehouseId { get; set; }
+        public int WarehouseId { get; set; } // Supplier Id
 
         public virtual Warehouse Warehouse { get; set; }
         public virtual Category Category { get; set; }

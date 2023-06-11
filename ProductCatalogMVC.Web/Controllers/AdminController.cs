@@ -25,6 +25,20 @@ namespace ProductCatalogMVC.Web.Controllers
             return View();
         }
         [HttpGet]
+        public IActionResult AddConnectionCategory()
+        {
+            NewConnectionCategoryVm vm = new NewConnectionCategoryVm();
+            var listConnection = _adminService.AddConnectionCategory(vm);
+            return View(listConnection);
+        }
+        [HttpPost]
+        public IActionResult AddConnectionCategory(NewConnectionCategoryVm model)
+        {
+            
+            return View();
+        }
+
+        [HttpGet]
         public IActionResult AddCatalogCategory()
         {
             NewCatalogCategoryVm vm = new NewCatalogCategoryVm();

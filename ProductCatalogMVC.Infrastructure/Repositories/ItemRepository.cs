@@ -49,9 +49,10 @@ namespace ProductCatalogMVC.Infrastructure.Repositories
 
         public IQueryable<Item> GetItemsByCategory(int categoryId)
         {
-            var items = _context.Items.Include(i => i.ItemCategory)
-                .ThenInclude(ic => ic.Category)
-                .Where(i => i.ItemCategory.Any(ic => ic.CategoryId == categoryId));
+            //var items = _context.Items.Include(i => i.ItemCategory)
+            //    .ThenInclude(ic => ic.Category)
+            //    .Where(i => i.ItemCategory.Any(ic => ic.CategoryId == categoryId));
+            var items = _context.Items.Where(i =>i.CategoryId == categoryId);
             return items;
         }
 

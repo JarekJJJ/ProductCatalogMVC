@@ -4,6 +4,7 @@ using ProductCatalogMVC.Application.Interfaces;
 using ProductCatalogMVC.Application.ViewModels.Category;
 using ProductCatalogMVC.Application.ViewModels.Item;
 using ProductCatalogMVC.Domain.Interface;
+using ProductCatalogMVC.Domain.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace ProductCatalogMVC.Application.Services
             _mapper = mapper;
         }
 
-       
+
 
         //public ListItemForListVm GetAllItemsForList() //
         //{
@@ -55,12 +56,18 @@ namespace ProductCatalogMVC.Application.Services
             {
                 var getItem = _itemRepo.GetItemById(element.ItemId);
                 var gWarehouse = _warehouseRepo.GetWarehouseById(element.WarehouseId);
-              
+                int _catId = 0;
+                if (getItem.CategoryId != null)
+                {
+                    _catId = (int)getItem.CategoryId;
+                }
+
                 var item = new ItemForListVm()
                 {
-                    
+
                     Id = getItem.Id,
                     Name = getItem.Name,
+                    CategoryId = _catId,
                     ShortDescription = getItem.ShortDescription,
                     Symbol = getItem.Symbol,
                     EanCode = getItem.EanCode,
@@ -71,23 +78,23 @@ namespace ProductCatalogMVC.Application.Services
                 string folderPath = Directory.GetCurrentDirectory(); // pobiera folder projektu                
                 string imgPath = $"{folderPath}/ProductImage/{item.EanCode}"; // tworzy ścieżkę do folderu ze zdjęciami
                 string[] imageFiles = Directory.GetFiles(imgPath, "*.jpg"); // pobiera do tablicy wszystkie zdjęcia z folderu
-                
+
                 var imagePath = imageFiles.FirstOrDefault();
                 var singleImagePath = Path.GetFileName(imagePath);
-                item.ImgMainPath = singleImagePath;    
+                item.ImgMainPath = singleImagePath;
                 //if ((getItem.IsActive) && (gWarehouse.IsActive))
                 //  {
                 result.Items.Add(item);
-              //  }
-              
+                //  }
+
 
             }
             foreach (var catCategory in _category)
             {
                 var category = new CatalogCategoryForListVm()
                 {
-                    Id= catCategory.Id,
-                   // CategoryMainId = catCategory.CategoryMainId,
+                    Id = catCategory.Id,
+                    // CategoryMainId = catCategory.CategoryMainId,
                     CategoryHomeId = catCategory.CategoryHomeId,
                     Name = catCategory.Name,
                     IsActive = catCategory.IsActive,

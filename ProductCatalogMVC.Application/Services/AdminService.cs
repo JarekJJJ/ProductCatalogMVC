@@ -3,6 +3,7 @@ using ProductCatalogMVC.Application.Interfaces;
 using ProductCatalogMVC.Application.ViewModels.Admin;
 using ProductCatalogMVC.Application.ViewModels.Category;
 using ProductCatalogMVC.Application.ViewModels.Item;
+using ProductCatalogMVC.Application.ViewModels.Warehouse;
 using ProductCatalogMVC.Domain.Interface;
 using ProductCatalogMVC.Domain.Model;
 using System;
@@ -26,26 +27,101 @@ namespace ProductCatalogMVC.Application.Services
         private readonly ICategoryRepository _categoryRepo;
         private readonly IMapper _mapper;
         CultureInfo cultureInfo = new CultureInfo("pl-PL");
-        
+
         public AdminService(IItemRepository itemRepo, IWarehouseItemRepository wItemRepo,
-            IWarehouseRepository warehouseRepo,ISupplierCategoryRepository supplierCategoryRepo, ICategoryRepository categoryRepository ,IMapper mapper)
+            IWarehouseRepository warehouseRepo, ISupplierCategoryRepository supplierCategoryRepo, ICategoryRepository categoryRepository, IMapper mapper)
         {
             _itemRepo = itemRepo;
             _wItemRepo = wItemRepo;
             _warehouseRepo = warehouseRepo;
             _supplierCategoryRepo = supplierCategoryRepo;
-            _categoryRepo= categoryRepository;
+            _categoryRepo = categoryRepository;
             _mapper = mapper;
         }
-        public NewCatalogCategoryVm AddCatalogCategory (NewCatalogCategoryVm newCatalogCategoryVm)
+        public NewConnectionCategoryVm AddConnectionCategory(NewConnectionCategoryVm newConnectionCategoryVm)
+        {
+            var _category = _categoryRepo.GetAllCategory();
+            var _items = _itemRepo.GetAllItems();
+            var _wItems = _wItemRepo.GetAllItems();
+            var _suppCategory = _supplierCategoryRepo.GetAllCategory();
+            var _warehouses = _warehouseRepo.GetAll();
+            NewConnectionCategoryVm result = new NewConnectionCategoryVm();
+            result.CatalogCategoryList = new List<CatalogCategoryForListVm>();
+            result.ItemsList = new List<ItemForListVm>();
+            result.WarehouseItemsList = new List<WarehouseItemForListVm>();
+            result.SupplierCategoryList = new List<SupplierCategoryForListVm>();
+            result.WarehousesList = new List<WarehouseForListVm>();
+
+            foreach (var catCategory in _category) //Add Catalog Category to List
+            {
+                var category = new CatalogCategoryForListVm()
+                {
+                    Id = catCategory.Id,
+                    CategoryHomeId = catCategory.CategoryHomeId,
+                    Name = catCategory.Name,
+                    IsActive = catCategory.IsActive,
+                };
+                result.CatalogCategoryList.Add(category);
+            }
+            foreach (var item in _items) //Add Item to list
+            {
+                var _item = new ItemForListVm()
+                {
+                    Id = item.Id,
+                    CategoryId = (int)item.CategoryId,
+                    Name = item.Name,
+                };
+                if (!item.IsDeleted)
+                {
+                    result.ItemsList.Add(_item);
+                }
+            }
+            foreach (var item in _wItems)
+            {
+                var wItem = new WarehouseItemForListVm()
+                {
+                    Id = item.Id,
+                    ItemId = item.ItemId,
+                    SuppCategoryId = item.SuppCategoryId,
+                    WarehouseId = item.WarehouseId,
+                };
+                result.WarehouseItemsList.Add(wItem);
+            }
+            foreach (var supCat in _suppCategory) // Add supplier Category to list vm
+            {
+                var suppCategory = new SupplierCategoryForListVm()
+                {
+                    Id = supCat.Id,
+                    SuppCategoryId = supCat.SuppCategoryId,
+                    CategoryHomeId = supCat.CategoryHomeId,
+                    Name = supCat.Name,
+                    WarehouseId = supCat.WarehouseId,
+                };
+                result.SupplierCategoryList.Add(suppCategory);
+            }
+            foreach (var warehouse in _warehouses)
+            {
+                var _warrhouse = new WarehouseForListVm()
+                {
+                    Id = warehouse.Id,
+                    Name = warehouse.Name,
+                    Description = warehouse.Description,
+                };
+                result.WarehousesList.Add(_warrhouse);
+            }
+
+            return result;
+        }
+
+        public NewCatalogCategoryVm AddCatalogCategory(NewCatalogCategoryVm newCatalogCategoryVm)
         {
             //var _listCC = _mapper.Map<Category>(ListOfCategory);
             var _category = _categoryRepo.GetAllCategory();
             NewCatalogCategoryVm result = new NewCatalogCategoryVm();
             result.CatalogCategoryList = new List<CatalogCategoryForListVm>();
-            if(newCatalogCategoryVm.Name!= null)
+            if (newCatalogCategoryVm.Name != null)
             {
-                if(newCatalogCategoryVm.IsMainCategory==true)
+                if (newCatalogCategoryVm.IsMainCategory == true)
                 {
                     newCatalogCategoryVm.CategoryHomeId = 0;
                 }
@@ -58,7 +134,6 @@ namespace ProductCatalogMVC.Application.Services
                 var category = new CatalogCategoryForListVm()
                 {
                     Id = catCategory.Id,
-                   // CategoryMainId = catCategory.CategoryMainId,
                     CategoryHomeId = catCategory.CategoryHomeId,
                     Name = catCategory.Name,
                     IsActive = catCategory.IsActive,
@@ -98,12 +173,12 @@ namespace ProductCatalogMVC.Application.Services
 
             return id;
         }
-        public string CutIncomXmlString (string str) // funkcja potrzebna w przyszłości przy pobieraniu z adresu online
+        public string CutIncomXmlString(string str) // funkcja potrzebna w przyszłości przy pobieraniu z adresu online
         {
             string result = str.Remove(0, 7);
-                return result;
+            return result;
         }
-        public void SaveImageFromLink (string imageUrl, string folderName)
+        public void SaveImageFromLink(string imageUrl, string folderName)
         {
             try
             {
@@ -116,7 +191,7 @@ namespace ProductCatalogMVC.Application.Services
                     string fileName = Guid.NewGuid().ToString() + ".jpg";
                     string filePath = System.IO.Path.Combine(newFolderPath, fileName);
                     System.IO.File.WriteAllBytes(filePath, imageData);
-                    
+
                 }
             }
             catch (Exception)
@@ -124,7 +199,7 @@ namespace ProductCatalogMVC.Application.Services
 
                 throw;
             }
-           
+
         }
         public void LoadItemsXML(XDocument xmlDocument)
         {
@@ -145,12 +220,12 @@ namespace ProductCatalogMVC.Application.Services
                 XElement PurchasePrice = elementXml.Element("cena");
                 if (ProductName != null && XEanCode != null)
                 {
-                   NewItemVm itemVm= new NewItemVm();
+                    NewItemVm itemVm = new NewItemVm();
                     NewWarehouseItemVm newWarehouseItemVm = new NewWarehouseItemVm();
                     int warehouseItemId = 0;
-                    
+
                     var validationItem = _itemRepo.GetAllItems().FirstOrDefault(i => i.EanCode == XEanCode.Value);
-                    if (validationItem == null) 
+                    if (validationItem == null)
                     {
                         itemVm.Name = ProductName.Value;
                         itemVm.Symbol = ProductSymbol.Value;
@@ -159,11 +234,11 @@ namespace ProductCatalogMVC.Application.Services
                         itemVm.ShortDescription = ProductDescription.Value;
                         itemVm.Producent = ProducentName.Value;
                         itemVm.IsDeleted = false;
-                        itemVm.IsActive= false;
+                        itemVm.IsActive = false;
                         SaveImageFromLink(ImageLink.Value, itemVm.EanCode);
                         var newItem = _mapper.Map<Item>(itemVm);
                         var id = _itemRepo.AddItem(newItem);
-                       
+
                         warehouseItemId = id; //jeżeli produkt nie istnieje pobierane jest Id z nowo utworzonego
                     }
                     else
@@ -180,7 +255,7 @@ namespace ProductCatalogMVC.Application.Services
                         newWarehouseItemVm.VatRate = 23;
                         newWarehouseItemVm.Quantity = int.Parse(ProductQuantity.Value);
                         newWarehouseItemVm.NetPurchasePrice = float.Parse(PurchasePrice.Value, cultureInfo);
-                        newWarehouseItemVm.IsActive= false;
+                        newWarehouseItemVm.IsActive = false;
                         var _newWarehouseItem = _mapper.Map<WarehouseItem>(newWarehouseItemVm);
                         var wId = _wItemRepo.AddNewDelivery(_newWarehouseItem);
 
@@ -195,7 +270,7 @@ namespace ProductCatalogMVC.Application.Services
                     }
 
 
-                   // _itemRepo.AddItem - zrobić mapowanie oraz zapis do warehouseItem
+                    // _itemRepo.AddItem - zrobić mapowanie oraz zapis do warehouseItem
                 }
 
             }
@@ -207,7 +282,7 @@ namespace ProductCatalogMVC.Application.Services
             _supplierCategoryRepo.DeleteAllCategory();
             //Category category= new Category() { CategoryMainId=1, Name="Kategoria Domyślna", IsActive=false };
             //_categoryRepo.AddCategory(category);
-          
+
             NewIncomSuppCategoryVm newIncomSuppCategory = new NewIncomSuppCategoryVm();
             foreach (XElement elementXml in xmlDocument.Root.Elements("grupy"))
             {
@@ -240,13 +315,8 @@ namespace ProductCatalogMVC.Application.Services
                     vCategory.CategoryId = 5; //Wartość domyślna (kategoria domyślna) zmieniana przez admina w widoku
                     vCategory.Name = newIncomSuppCategory.Name;
                     _supplierCategoryRepo.AddSuppCategory(vCategory);
-                   
-
-                    
                 }
-                
             }
-                        
         }
     }
 }

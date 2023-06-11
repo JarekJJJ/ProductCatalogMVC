@@ -18,6 +18,8 @@ namespace ProductCatalogMVC.Application.Interfaces
         void LoadXmlCategory(XDocument xmlDocument);
         void LoadItemsXML(XDocument xmlDocument);
         NewCatalogCategoryVm AddCatalogCategory(NewCatalogCategoryVm newCatalogCategoryVm);
+        NewConnectionCategoryVm AddConnectionCategory(NewConnectionCategoryVm newConnectionCategoryVm);
+
        // List<CatalogCategoryForListVm> GetCatalogCategory();
     }
 }

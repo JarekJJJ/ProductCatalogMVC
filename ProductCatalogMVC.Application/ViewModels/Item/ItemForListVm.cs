@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace ProductCatalogMVC.Application.ViewModels.Item
 {
-    public class ItemForListVm : IMapFrom<ProductCatalogMVC.Domain.Model.Item>,
-                                IMapFrom<ProductCatalogMVC.Domain.Model.WarehouseItem>,
-                                IMapFrom<ProductCatalogMVC.Domain.Model.Warehouse>
+    public class ItemForListVm : IMapFrom<ProductCatalogMVC.Domain.Model.Item>
+                                
     {
         public int Id { get; set; }//Pozycje z modelu Item
         public string Name { get; set; } //Pozycje z modelu Item
+        public int CategoryId { get; set; } //Item
         public string ShortDescription { get; set; } //Pozycje z modelu Item
         public string Symbol { get; set; }//Pozycje z modelu Item
         public string EanCode { get; set; }//Pozycje z modelu Item

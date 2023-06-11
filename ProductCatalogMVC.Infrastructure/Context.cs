@@ -15,7 +15,7 @@ namespace ProductCatalogMVC.Infrastructure
         public DbSet<Category> Categories { get; set; }
         public DbSet<SupplierCategory> supplierCategories { get; set; }
         public DbSet<Item> Items { get; set; }
-        public DbSet<ItemCategory> ItemCategory { get; set; }
+       // public DbSet<ItemCategory> ItemCategory { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<WarehouseItem> WarehouseItems { get; set; }
 
@@ -26,16 +26,16 @@ namespace ProductCatalogMVC.Infrastructure
         {
             base.OnModelCreating(builder);
          
-            builder.Entity<ItemCategory>()
-                .HasKey(ic=> new {ic.ItemId,ic.CategoryId});
-            builder.Entity<ItemCategory>()
-                .HasOne<Item>(ic => ic.Item)
-                .WithMany(i => i.ItemCategory)
-                .HasForeignKey(ic => ic.ItemId);
-            builder.Entity<ItemCategory>()
-                .HasOne<Category>(ic => ic.Category)
-                .WithMany(i => i.ItemCategory)
-                .HasForeignKey(ic => ic.CategoryId);
+            //builder.Entity<ItemCategory>()
+            //    .HasKey(ic=> new {ic.ItemId,ic.CategoryId});
+            //builder.Entity<ItemCategory>()
+            //    .HasOne<Item>(ic => ic.Item)
+            //    .WithMany(i => i.ItemCategory)
+            //    .HasForeignKey(ic => ic.ItemId);
+            //builder.Entity<ItemCategory>()
+            //    .HasOne<Category>(ic => ic.Category)
+            //    .WithMany(i => i.ItemCategory)
+            //    .HasForeignKey(ic => ic.CategoryId);
         }
 
     }
