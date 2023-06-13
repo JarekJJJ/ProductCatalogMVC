@@ -45,7 +45,9 @@ namespace ProductCatalogMVC.Application.Services
             var _wItems = _wItemRepo.GetAllItems();
             var _suppCategory = _supplierCategoryRepo.GetAllCategory();
             var _warehouses = _warehouseRepo.GetAll();
+
             NewConnectionCategoryVm result = new NewConnectionCategoryVm();
+
             result.CatalogCategoryList = new List<CatalogCategoryForListVm>();
             result.ItemsList = new List<ItemForListVm>();
             result.WarehouseItemsList = new List<WarehouseItemForListVm>();
@@ -65,10 +67,15 @@ namespace ProductCatalogMVC.Application.Services
             }
             foreach (var item in _items) //Add Item to list
             {
+                int _catId = 0;
+                if (item.CategoryId != null)
+                {
+                    _catId = (int)item.CategoryId;
+                }
                 var _item = new ItemForListVm()
                 {
                     Id = item.Id,
-                    CategoryId = (int)item.CategoryId,
+                    CategoryId = _catId,
                     Name = item.Name,
                 };
                 if (!item.IsDeleted)
