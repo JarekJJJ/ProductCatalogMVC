@@ -25,16 +25,16 @@ namespace ProductCatalogMVC.Web.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult AddConnectionCategory()
+        public IActionResult AddConnectionCategory(int? warehouseId, int? suppCategoryId, int? newCatalogCategory)
         {
             NewConnectionCategoryVm vm = new NewConnectionCategoryVm();
-            var listConnection = _adminService.AddConnectionCategory(vm);
+            var listConnection = _adminService.AddConnectionCategory(vm, warehouseId, suppCategoryId, newCatalogCategory);
             return View(listConnection);
         }
         [HttpPost]
         public IActionResult AddConnectionCategory(NewConnectionCategoryVm model)
         {
-            
+
             return View();
         }
 
@@ -43,11 +43,11 @@ namespace ProductCatalogMVC.Web.Controllers
         {
             NewCatalogCategoryVm vm = new NewCatalogCategoryVm();
             var ListCatalogCategory = _adminService.AddCatalogCategory(vm);
-           
+
             //NewCatalogCategoryVm vm = new NewCatalogCategoryVm();
             //vm.CatalogCategoryList.AddRange(ListCatalogCategory);
-           
-            
+
+
             return View(ListCatalogCategory);
         }
         [HttpPost]
@@ -63,7 +63,7 @@ namespace ProductCatalogMVC.Web.Controllers
             return View(new NewWarehouseVm());
         }
         [HttpPost]
-        public IActionResult AddWarehouse(NewWarehouseVm model) 
+        public IActionResult AddWarehouse(NewWarehouseVm model)
         {
             var id = _adminService.AddWarehouse(model);
             return RedirectToAction("Index");
@@ -78,16 +78,16 @@ namespace ProductCatalogMVC.Web.Controllers
         {
             if (model != null && model.Length > 0)
             {
-                
+
                 var listSupCategory = XDocument.Load(model.OpenReadStream());
                 _adminService.LoadXmlCategory(listSupCategory);
                 //var xmlDoc = new XmlDocument();
                 //xmlDoc.Load(model.OpenReadStream());
                 //AddSuppCategory(xmlDoc);
-                
-               
+
+
             }
-                return View();
+            return View();
         }
         [HttpGet]
         public IActionResult AddItemsXML()
@@ -102,7 +102,7 @@ namespace ProductCatalogMVC.Web.Controllers
 
                 var listItemsXML = XDocument.Load(model.OpenReadStream());
                 _adminService.LoadItemsXML(listItemsXML);
-               // _adminService.LoadXmlCategory(listSupCategory);
+                // _adminService.LoadXmlCategory(listSupCategory);
                 //var xmlDoc = new XmlDocument();
                 //xmlDoc.Load(model.OpenReadStream());
                 //AddSuppCategory(xmlDoc);

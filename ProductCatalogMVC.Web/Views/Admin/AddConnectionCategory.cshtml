@@ -3,42 +3,103 @@
     ViewData["Title"] = "Connection Category Panel";
 }
 
-<h1>Panel - Conection Category</h1>
+<h1>Panel - Connection Category</h1>
 
 <h4>Vm - NewConnectionCategoryVm</h4>
+<h5 class="text-danger">
+    Wybrane opcje: @{
+        var sWareHouse = Model.WarehousesList.FirstOrDefault(w => w.Id == Model.SelectedWarehouse);
+        if (sWareHouse != null)
+        {
+            @sWareHouse.Name
+        }
+        var _selectedSuppCategory = Model.SupplierCategoryList.FirstOrDefault(s => s.SuppCategoryId == Model.SelectedSupplierCategory);
+        if (_selectedSuppCategory != null)
+        {
+            <span>, @_selectedSuppCategory.Name</span>
+        }
+    }
+</h5>
+<hr />
 <div class="container">
     <div class="row">
 
-        <form class="row" asp-action="AddConnectionCategory">
+        <form method="get" class="row" asp-action="AddConnectionCategory">
             <div class="col-auto">
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                <select class="form-select" id="warehouseId" name="warehouseId">
+                    <option selected>Wybierz magazyn</option>
+                    @foreach (var warehouse in Model.WarehousesList)
+                    {
+                        <option value="@warehouse.Id" name="warehouseId" selected="@(sWareHouse !=null && warehouse.Id == sWareHouse.Id ? "selected": null)">@warehouse.Name</option>
+                    }
                 </select>
             </div>
             <div class="col-auto">
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                <select class="form-select" id="suppCategoryId" name="suppCategoryId" hidden="@(sWareHouse ==null ? "hidden": null)">
+                    <option selected>Wybierz produkty z nieprzypisanymi kategoriami</option>
+                    @if (sWareHouse != null)
+                    {
+                        @foreach (var supcat in Model.SupplierCategoryList)
+                        {
+                            <option value="@supcat.SuppCategoryId" name="suppCategoryId" selected="@(_selectedSuppCategory != null && supcat.SuppCategoryId == _selectedSuppCategory.SuppCategoryId)"
+                            hidden="@(supcat.CountWarehouseItem > 0 ? null:"hidden")">@supcat.Name - @supcat.CountWarehouseItem</option>
+                        }
+                    }
+
                 </select>
             </div>
             <div class="col-auto">
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                <select class="form-select" hidden="@(_selectedSuppCategory ==null ? "hidden": null)">
+                    <option selected>Wybierz kategorię sklepu</option>
+                    @foreach (var catCategory in Model.CatalogCategoryList)
+                    {
+                        <option value="@catCategory.Id" name="@catCategory.Id" hidden="@(catCategory.CategoryHomeId == 0 ? "hidden" : null)">@catCategory.Name</option>
+                    }
                 </select>
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Sign in</button>
+                <button type="submit" class="btn btn-primary">Wybierz</button>
             </div>
         </form>
 
 
+
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-8">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            Id
+                        </th>
+                        <th>
+                            Nazwa
+                        </th>
+                        <th>
+                            Ilość
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.WarehouseItemsList)
+                    {
+                        <tr>
+                            <td>@(item.Id)</td>
+                            <td>
+                                @{
+                                    var itemName = Model.ItemsList.FirstOrDefault(i => i.Id == item.ItemId);
+                                }
+                                @(itemName.Name)
+                            </td>
+                            <td>
+                                @(item.Quantity)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>

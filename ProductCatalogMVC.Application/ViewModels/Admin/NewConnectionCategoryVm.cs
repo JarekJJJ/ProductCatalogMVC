@@ -15,6 +15,8 @@ namespace ProductCatalogMVC.Application.ViewModels.Admin
         public int Id { get; set; } 
         public int ItemId { get; set; } //item
         public int CategoryId { get; set; } //item
+        public int SelectedSupplierCategory { get; set; }
+        public int SelectedWarehouse { get; set; }
         public List<CatalogCategoryForListVm> CatalogCategoryList { get; set; }
         public List<ItemForListVm> ItemsList { get; set; }
         public List<SupplierCategoryForListVm> SupplierCategoryList { get; set; }

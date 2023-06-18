@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -38,12 +39,11 @@ namespace ProductCatalogMVC.Application.Services
             _categoryRepo = categoryRepository;
             _mapper = mapper;
         }
-        public NewConnectionCategoryVm AddConnectionCategory(NewConnectionCategoryVm newConnectionCategoryVm)
+        public NewConnectionCategoryVm AddConnectionCategory(NewConnectionCategoryVm newConnectionCategoryVm, int? warehouseId, int? suppCategoryId, int? newCatalogCategory)
         {
             var _category = _categoryRepo.GetAllCategory();
             var _items = _itemRepo.GetAllItems();
-            var _wItems = _wItemRepo.GetAllItems();
-            var _suppCategory = _supplierCategoryRepo.GetAllCategory();
+            var _suppCategory = _supplierCategoryRepo.GetAllCategory().Where(w => w.WarehouseId == warehouseId && warehouseId != 0);
             var _warehouses = _warehouseRepo.GetAll();
 
             NewConnectionCategoryVm result = new NewConnectionCategoryVm();
@@ -53,6 +53,26 @@ namespace ProductCatalogMVC.Application.Services
             result.WarehouseItemsList = new List<WarehouseItemForListVm>();
             result.SupplierCategoryList = new List<SupplierCategoryForListVm>();
             result.WarehousesList = new List<WarehouseForListVm>();
+            if (warehouseId.HasValue && suppCategoryId.HasValue)
+            {
+                var _wItems = _wItemRepo.GetAllItems().Where(w => w.WarehouseId == warehouseId && suppCategoryId == w.SuppCategoryId);
+                foreach (var item in _wItems)
+                {
+                    var wItem = new WarehouseItemForListVm()
+                    {
+                        Id = item.Id,
+                        ItemId = item.ItemId,
+                        SuppCategoryId = item.SuppCategoryId,
+                        WarehouseId = item.WarehouseId,
+                        Quantity = item.Quantity,
+                    };
+                    result.WarehouseItemsList.Add(wItem);
+                }
+                if (suppCategoryId != null)
+                {
+                    result.SelectedSupplierCategory = (int)suppCategoryId;
+                }
+            }
 
             foreach (var catCategory in _category) //Add Catalog Category to List
             {
@@ -83,28 +103,23 @@ namespace ProductCatalogMVC.Application.Services
                     result.ItemsList.Add(_item);
                 }
             }
-            foreach (var item in _wItems)
+            if (warehouseId != null)
             {
-                var wItem = new WarehouseItemForListVm()
+                foreach (var supCat in _suppCategory) // Add supplier Category to list vm
                 {
-                    Id = item.Id,
-                    ItemId = item.ItemId,
-                    SuppCategoryId = item.SuppCategoryId,
-                    WarehouseId = item.WarehouseId,
-                };
-                result.WarehouseItemsList.Add(wItem);
-            }
-            foreach (var supCat in _suppCategory) // Add supplier Category to list vm
-            {
-                var suppCategory = new SupplierCategoryForListVm()
-                {
-                    Id = supCat.Id,
-                    SuppCategoryId = supCat.SuppCategoryId,
-                    CategoryHomeId = supCat.CategoryHomeId,
-                    Name = supCat.Name,
-                    WarehouseId = supCat.WarehouseId,
-                };
-                result.SupplierCategoryList.Add(suppCategory);
+                    var countWarehouseItem = _wItemRepo.GetAllItems().Where(c => c.SuppCategoryId == supCat.SuppCategoryId).Count();
+                    var suppCategory = new SupplierCategoryForListVm()
+                    {
+                        Id = supCat.Id,
+                        CategoryId = supCat.CategoryId,
+                        SuppCategoryId = supCat.SuppCategoryId,
+                        CategoryHomeId = supCat.CategoryHomeId,
+                        Name = supCat.Name,
+                        WarehouseId = supCat.WarehouseId,
+                        CountWarehouseItem = countWarehouseItem,
+                    };
+                    result.SupplierCategoryList.Add(suppCategory);
+                }
             }
             foreach (var warehouse in _warehouses)
             {
@@ -116,6 +131,25 @@ namespace ProductCatalogMVC.Application.Services
                 };
                 result.WarehousesList.Add(_warrhouse);
             }
+            if (warehouseId != null)
+            {
+                result.SelectedWarehouse = (int)warehouseId;
+            }
+            // Update Category Item 
+            if (newCatalogCategory != null)
+            {
+                var selecteWitems = _wItemRepo.GetAllItems().Where(a => a.WarehouseId == warehouseId && a.SuppCategoryId == suppCategoryId);
+                foreach (var wItem in selecteWitems)
+                {
+                    var uItem = _items.FirstOrDefault(i => i.Id == wItem.ItemId);
+                    if (uItem != null)
+                    {
+                        uItem.CategoryId = newCatalogCategory;
+                        _itemRepo.UpdateItem(uItem);
+                    }                   
+                }
+            }
+
 
             return result;
         }
