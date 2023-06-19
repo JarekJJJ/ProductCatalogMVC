@@ -17,7 +17,7 @@ namespace ProductCatalogMVC.Application.ViewModels.Category
         public bool IsActive { get; set; }
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<CatalogCategoryForListVm, ProductCatalogMVC.Domain.Model.Category>();
+            profile.CreateMap<ProductCatalogMVC.Domain.Model.Category, CatalogCategoryForListVm >();
         }
     }
 }

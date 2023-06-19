@@ -49,22 +49,36 @@
                 </select>
             </div>
             <div class="col-auto">
-                <select class="form-select" hidden="@(_selectedSuppCategory ==null ? "hidden": null)">
+                <button type="submit" class="btn btn-primary">Wybierz</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="row mt-2">
+        <form method="post" class="row" hiiden="" asp-action="AddConnectionCategory">
+            <input hidden="hidden" id="warehouseId" name="warehouseId" value="@Model.SelectedWarehouse" />
+            <input hidden="hidden" id="suppCategoryId" name="suppCategoryId" value="@Model.SelectedSupplierCategory" />
+            <div class="col-auto">
+                <select class="form-select" name="newCatalogCategory" id="newCatalogCategory" hidden="@(_selectedSuppCategory ==null ? "hidden": null)">
                     <option selected>Wybierz kategorię sklepu</option>
                     @foreach (var catCategory in Model.CatalogCategoryList)
                     {
-                        <option value="@catCategory.Id" name="@catCategory.Id" hidden="@(catCategory.CategoryHomeId == 0 ? "hidden" : null)">@catCategory.Name</option>
+                        <option value="@catCategory.Id" name="newCatalogCategory" hidden="@(catCategory.CategoryHomeId == 0 ? "hidden" : null)">@catCategory.Name - @catCategory.Id</option>
                     }
                 </select>
             </div>
             <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Wybierz</button>
+                <button type="submit" hidden="@(_selectedSuppCategory ==null ? "hidden": null)" class="btn btn-primary">Zatwierdź</button>
             </div>
+
         </form>
-
-
-
     </div>
+
+
+
+
+
     <hr />
     <div class="row">
         <div class="col-md-8">

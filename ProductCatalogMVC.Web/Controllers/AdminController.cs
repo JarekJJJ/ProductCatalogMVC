@@ -32,8 +32,12 @@ namespace ProductCatalogMVC.Web.Controllers
             return View(listConnection);
         }
         [HttpPost]
-        public IActionResult AddConnectionCategory(NewConnectionCategoryVm model)
+        public IActionResult AddConnectionCategory(NewConnectionCategoryVm model, int warehouseId, int suppCategoryId, int newCatalogCategory)
         {
+            //if(warehouseId != null && suppCategoryId!=null && newCatalogCategory!=null)
+            //{
+            //}
+            var listConnection = _adminService.AddConnectionCategory(model, warehouseId, suppCategoryId, newCatalogCategory);
 
             return View();
         }

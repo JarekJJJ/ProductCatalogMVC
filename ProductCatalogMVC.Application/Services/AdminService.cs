@@ -138,10 +138,10 @@ namespace ProductCatalogMVC.Application.Services
             // Update Category Item 
             if (newCatalogCategory != null)
             {
-                var selecteWitems = _wItemRepo.GetAllItems().Where(a => a.WarehouseId == warehouseId && a.SuppCategoryId == suppCategoryId);
-                foreach (var wItem in selecteWitems)
+                var selectedWitems = _wItemRepo.GetAllItems().Where(a => a.WarehouseId == warehouseId && a.SuppCategoryId == suppCategoryId);
+                foreach (var wItem in selectedWitems)
                 {
-                    var uItem = _items.FirstOrDefault(i => i.Id == wItem.ItemId);
+                    var uItem = _items.FirstOrDefault(i => i.Id == wItem.ItemId);                   
                     if (uItem != null)
                     {
                         uItem.CategoryId = newCatalogCategory;
@@ -149,7 +149,6 @@ namespace ProductCatalogMVC.Application.Services
                     }                   
                 }
             }
-
 
             return result;
         }

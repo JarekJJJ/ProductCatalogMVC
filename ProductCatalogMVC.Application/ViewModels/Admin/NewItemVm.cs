@@ -21,7 +21,7 @@ namespace ProductCatalogMVC.Application.ViewModels.Admin
         public bool IsDeleted { get; set; }
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<NewItemVm, Domain.Model.Item>();
+            profile.CreateMap<Domain.Model.Item, NewItemVm>();
         }
 
     }
