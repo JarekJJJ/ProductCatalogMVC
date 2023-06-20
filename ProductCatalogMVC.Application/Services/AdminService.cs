@@ -138,7 +138,7 @@ namespace ProductCatalogMVC.Application.Services
             // Update Category Item 
             if (newCatalogCategory != null)
             {
-                var selectedWitems = _wItemRepo.GetAllItems().Where(a => a.WarehouseId == warehouseId && a.SuppCategoryId == suppCategoryId);
+                var selectedWitems = _wItemRepo.GetAllItems().Where(a => a.WarehouseId == warehouseId && a.SuppCategoryId == suppCategoryId).ToList();
                 foreach (var wItem in selectedWitems)
                 {
                     var uItem = _items.FirstOrDefault(i => i.Id == wItem.ItemId);                   
